@@ -34,6 +34,16 @@
         android:id="@+id/progressBar"
         android:layout_below="@+id/getData"
         android:layout_centerHorizontal="true" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fav"
+            android:id="@+id/hiveActivityBTN"
+            android:layout_below="@+id/tagged"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
 
     <ListView

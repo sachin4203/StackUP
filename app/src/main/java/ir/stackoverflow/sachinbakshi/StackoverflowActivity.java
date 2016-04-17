@@ -1,22 +1,24 @@
 package ir.stackoverflow.sachinbakshi;
 
 
-import android.content.ContentProviderOperation;
-import android.content.OperationApplicationException;
+import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.facebook.stetho.Stetho;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,7 +48,13 @@ public class StackoverflowActivity extends AppCompatActivity implements LoaderMa
     ProgressBar progressBar;
     @Bind(R.id.list2)
     ListView listView;
+    @Bind(R.id.hiveActivityBTN)
+    Button hiveActivityBTN;
+
+   /* @Bind(R.id.stackoverflowActivityBTN)
+    Button stackoverflowActivityBTN;*/
     private static final int CURSOR_LOADER_ID = 0;
+    long _id = 232;
 
     private static final String LOG_TAG = StackoverflowActivity.class.getSimpleName();
 
@@ -59,9 +67,27 @@ public class StackoverflowActivity extends AppCompatActivity implements LoaderMa
         setContentView(R.layout.activity_stackoverflow);
         ButterKnife.bind(this);
       //  getSupportLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                        .enableDumpapp(
+                                Stetho.defaultDumperPluginsProvider(this))
+                        .enableWebKitInspector(
+                                Stetho.defaultInspectorModulesProvider(this))
+                        .build());
         adapter = new CustomRecylerListAdapterr(this, mListData);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                Object o = listView.getItemAtPosition(position);
+                // Here i want have values of the clicked row,- like the name and/or id...,- but i get the following:
+                Toast.makeText(StackoverflowActivity.this, "You Clicked", Toast.LENGTH_LONG).show();
+
+                // Here i intend to Start a new Activity passing the "name" of the user (and/or id ...) to the new activity
+            }
+        });
     }
+
 
 
     @Override
@@ -69,16 +95,19 @@ public class StackoverflowActivity extends AppCompatActivity implements LoaderMa
         super.onResume();
         Log.d(LOG_TAG, "resume called");
 
-     //  getSupportLoaderManager().restartLoader(CURSOR_LOADER_ID, null, this);
+     // getLoaderManager().restartLoader(CURSOR_LOADER_ID, null, this);
     }
-/*
-    @OnClick(R.id.likeButton)
+
+  /*  @OnClick(R.id.likeButton)
     void insert(){
 
         Toast.makeText(StackoverflowActivity.this, "You clicked", Toast.LENGTH_LONG).show();
 
 
     }*/
+  /*@OnClick(R.id.stackoverflowActivityBTN) void showStackoverflowActivity() {
+      startActivity(new Intent(this, StackoverflowActivity.class));
+  }*/
 
 
     @OnClick(R.id.getData)
@@ -161,35 +190,37 @@ public class StackoverflowActivity extends AppCompatActivity implements LoaderMa
         });
     }
 
+    @OnClick(R.id.hiveActivityBTN) void showHiveActivity() {
+        startActivity(new Intent(this, MainActivity.class));
+
+    }
+
 
 
     public void insertData(){
         Log.d(LOG_TAG, "insert");
-        ArrayList<ContentProviderOperation> batchOperations = new ArrayList<>(mListData.size());
 
-        for (ListItemModel planet : mListData){
-            ContentProviderOperation.Builder builder = ContentProviderOperation.newInsert(
-                    QuestionProvider.Questions.CONTENT_URI);
-            builder.withValue(QuestionColumns.QUOTA_REMAINING, planet.getQuotaRemaining());
-            builder.withValue(QuestionColumns.QUOTA_MAX, planet.getQuotaMax());
-            builder.withValue(QuestionColumns.USER_PROFILE_IMAGE, planet.getUserProfileImage());
-            builder.withValue(QuestionColumns.USER_DISPLAY_NAME, planet.getUserDisplayName());
-            builder.withValue(QuestionColumns.SCORE, planet.getScore());
-            builder.withValue(QuestionColumns.QUESTION_LINK, planet.getQuestionLink());
-            builder.withValue(QuestionColumns.QUESTION_TITLE, planet.getQuestionTitle());
-            builder.withValue(QuestionColumns.LAST_ACTIVITY, planet.getLastActivity());
-            builder.withValue(QuestionColumns.TAGS, planet.getTags());
-            batchOperations.add(builder.build());
+        ListItemModel planet = mListData.get(1);
+            ContentValues cv = new ContentValues();
+
+           cv.put(QuestionColumns.QUOTA_REMAINING, planet.getQuotaRemaining());
+            cv.put(QuestionColumns.QUOTA_MAX, planet.getQuotaMax());
+            cv.put(QuestionColumns.USER_PROFILE_IMAGE, planet.getUserProfileImage());
+            cv.put(QuestionColumns.USER_DISPLAY_NAME, planet.getUserDisplayName());
+            cv.put(QuestionColumns.SCORE, planet.getScore());
+            cv.put(QuestionColumns.QUESTION_LINK, planet.getQuestionLink());
+            cv.put(QuestionColumns.QUESTION_TITLE, planet.getQuestionTitle());
+            cv.put(QuestionColumns.LAST_ACTIVITY, planet.getLastActivity());
+            cv.put(QuestionColumns.TAGS, planet.getTags());
+            this.getContentResolver().insert(
+                    QuestionProvider.Questions.withId(_id), cv);
+
+            _id++;
         }
 
-        try{
-            this.getContentResolver().applyBatch(QuestionProvider.AUTHORITY, batchOperations);
-        } catch(RemoteException | OperationApplicationException e){
-            Log.e(LOG_TAG, "Error applying batch insert", e);
 
-        }
 
-    }
+
 
 
 

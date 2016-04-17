@@ -26,22 +26,22 @@ public interface QuestionColumns {
             "_id";
 
     @DataType(DataType.Type.INTEGER) @NotNull public static final String QUOTA_REMAINING=
-            "overview";
+            "quota_remaining";
     @DataType(DataType.Type.INTEGER) @NotNull public static final String QUOTA_MAX =
-            "poster_path";
+            "quota_max";
     @DataType(DataType.Type.TEXT) @NotNull public static final String USER_PROFILE_IMAGE =
-            "vote_average";
+            "user_profile_image";
     @DataType(DataType.Type.TEXT) @NotNull public static final String USER_DISPLAY_NAME =
-            "release_date";
+            "user_display_name";
     @DataType(DataType.Type.INTEGER) @NotNull public static final String SCORE =
-            "backdrop_path";
+            "score";
     @DataType(DataType.Type.TEXT) @NotNull public static final String QUESTION_TITLE =
-            "backdrop_path";
+            "question_title";
     @DataType(DataType.Type.TEXT) @NotNull public static final String QUESTION_LINK =
-            "backdrop_path";
+            "question_link";
     @DataType(DataType.Type.INTEGER) @NotNull public static final String LAST_ACTIVITY =
-            "backdrop_path";
+            "last_activity";
     @DataType(DataType.Type.TEXT) @NotNull public static final String TAGS =
-            "backdrop_path";
+            "tags";
 
 }

@@ -8,20 +8,6 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ir.hive.retrofit2.MainActivity">
+    <include layout="@layout/fragment_favourite_ques" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hive as Server"
-        android:id="@+id/hiveActivityBTN"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Stackoverflow as Server"
-        android:id="@+id/stackoverflowActivityBTN"
-        android:layout_below="@+id/hiveActivityBTN"
-        android:layout_centerHorizontal="true" />
 </RelativeLayout>
